@@ -26,7 +26,7 @@ def create_dataset(h5ir, datafilelist, batchsize, num_epochs,
     dataset = dataset.map(
         map_func=lambda dataname: tuple(
             tf.py_func(h5ir.read, [dataname, False],
-                       [dtype, tf.int32, dtype, tf.string])
+                       [dtype, tf.int32]) #, dtype, tf.string])
         ),
         num_parallel_calls = 4
     )
@@ -192,7 +192,7 @@ class h5_input_reader(object):
         if profile: 
             end_time = time.time()
             print("Time to read in parallel %s = %.3f s" % (path, end_time-begin_time))
-        return data, label, weights, path
+        return data, label #, weights, path
 
     def sequential_read(self, datafile, profile=False):
         if isinstance(datafile, bytes):
@@ -271,7 +271,7 @@ class h5_input_reader(object):
                 print("READ: %s = %.3f s"%(key, val))
             print("")
 
-        return data, label, weights, path
+        return data, label #, weights, path
 
 def get_file_list(input_path, shuffle=True, max_files=-1): # use_horovod=True
     # Look for labels and data files
