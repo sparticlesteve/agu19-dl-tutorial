@@ -1,0 +1,25 @@
+output_dir: $SCRATCH/agu19-dl-tutorial/climseg-test
+
+data:
+    name: cam
+    train_dir: /global/cscratch1/sd/sfarrell/climate-seg-benchmark/data/climseg_data/train
+    valid_dir: /global/cscratch1/sd/sfarrell/climate-seg-benchmark/data/climseg_data/validation
+    #input_shape: [1152, 768, 16]
+    #target_shape: [1152, 768, 3]
+    n_train: 16
+    n_valid: 16
+    batch_size: 1
+
+model:
+    name: cnn
+    input_shape: [1152, 768, 16]
+    n_classes: 3
+
+optimizer:
+    name: Adam
+    lr: 0.001
+
+train:
+    loss: categorical_crossentropy
+    metrics: [accuracy]
+    n_epochs: 1
