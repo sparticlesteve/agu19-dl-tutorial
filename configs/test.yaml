@@ -1,0 +1,24 @@
+output_dir: $SCRATCH/agu19-dl-tutorial/test
+
+data:
+    name: dummy
+    input_shape: [1152, 768, 16]
+    target_shape: [1152, 768, 3]
+    n_train: 2
+    n_valid: 1
+    batch_size: 1
+
+model:
+    name: cnn
+    input_shape: [1152, 768, 16]
+    n_classes: 3
+
+optimizer:
+    name: Adam
+    lr: 0.001
+
+train:
+    loss: categorical_crossentropy
+    metrics: [accuracy]
+    # Put this under data?
+    n_epochs: 8
