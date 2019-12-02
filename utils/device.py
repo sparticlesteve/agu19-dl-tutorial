@@ -8,7 +8,7 @@ import os
 # Externals
 import tensorflow as tf
 
-def configure_session(intra_threads=32, inter_threads=2,
+def configure_session(intra_threads=4, inter_threads=2,
                       blocktime=1, affinity='granularity=fine,compact,1,0',
                       gpu=None):
     """Sets the thread knobs in the TF backend"""
