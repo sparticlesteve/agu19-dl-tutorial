@@ -4,10 +4,8 @@ data:
     name: cam
     train_dir: /global/cscratch1/sd/sfarrell/climate-seg-benchmark/data/climseg_data/train
     valid_dir: /global/cscratch1/sd/sfarrell/climate-seg-benchmark/data/climseg_data/validation
-    #input_shape: [1152, 768, 16]
-    #target_shape: [1152, 768, 3]
-    n_train: 16
-    n_valid: 16
+    n_train: 1024
+    n_valid: 256
     batch_size: 1
 
 model:
