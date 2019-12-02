@@ -20,6 +20,8 @@ optimizer:
     lr: 0.001
 
 train:
-    loss: categorical_crossentropy
-    metrics: [accuracy]
-    n_epochs: 1
+    loss: sparse_categorical_crossentropy
+    metrics: []
+    # These won't currently work without a little customization
+    #metrics: [MeanIoU, sparse_categorical_accuracy]
+    n_epochs: 4
