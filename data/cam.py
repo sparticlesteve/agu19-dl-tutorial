@@ -23,13 +23,26 @@ def create_dataset(h5ir, datafilelist, batchsize, num_epochs,
         dataset = tf.data.Dataset.from_tensor_slices(datafilelist)
     if shuffle:
         dataset = dataset.shuffle(buffer_size=100)
-    dataset = dataset.map(
-        map_func=lambda dataname: tuple(
-            tf.py_func(h5ir.read, [dataname, False],
-                       [dtype, tf.int32]) #, dtype, tf.string])
-        ),
-        num_parallel_calls = 4
-    )
+
+    def parse_data(filename):
+        data, label = tf.py_func(h5ir.read, inp=[filename, False],
+                                 Tout=[dtype, tf.int32])
+        data.set_shape([None, None, None])
+        label.set_shape([None, None])
+        return data, label
+
+    dataset = dataset.map(map_func=parse_data, num_parallel_calls = 4)
+
+    # Old implementation which doesn't work because keras cannot
+    # determine tensor ranks downstream
+    #dataset = dataset.map(
+    #    map_func=lambda dataname: tuple(
+    #        tf.py_func(h5ir.read, [dataname, False],
+    #                   [dtype, tf.int32]) #, dtype, tf.string])
+    #    ),
+    #    num_parallel_calls = 4
+    #)
+
     dataset = dataset.prefetch(16)
     # make sure all batches are equal in size
     dataset = dataset.apply(tf.contrib.data.batch_and_drop_remainder(batchsize))
