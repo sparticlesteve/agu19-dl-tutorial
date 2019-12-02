@@ -12,7 +12,7 @@ data:
 
 model:
     name: cnn
-    input_shape: [1152, 768, 16]
+    input_shape: [768, 1152, 16]
     n_classes: 3
 
 optimizer:

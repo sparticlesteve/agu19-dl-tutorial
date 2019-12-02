@@ -2,15 +2,15 @@ output_dir: $SCRATCH/agu19-dl-tutorial/test
 
 data:
     name: dummy
-    input_shape: [1152, 768, 16]
-    target_shape: [1152, 768, 3]
+    input_shape: [768, 1152, 16]
+    target_shape: [768, 1152, 3]
     n_train: 2
     n_valid: 1
     batch_size: 1
 
 model:
     name: cnn
-    input_shape: [1152, 768, 16]
+    input_shape: [768, 1152, 16]
     n_classes: 3
 
 optimizer:
