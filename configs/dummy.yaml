@@ -1,0 +1,22 @@
+output_dir: $SCRATCH/agu19-dl-tutorial/test
+
+data:
+    name: dummy
+    input_shape: [768, 1152, 16]
+    target_shape: [768, 1152]
+    n_train: 32
+    n_valid: 32
+    batch_size: 1
+
+model:
+    name: cnn
+    input_shape: [768, 1152, 16]
+    n_classes: 3
+
+optimizer:
+    name: Adam
+    lr: 0.001
+
+train:
+    loss: sparse_categorical_crossentropy
+    n_epochs: 4
