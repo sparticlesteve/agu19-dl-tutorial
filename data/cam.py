@@ -44,8 +44,8 @@ def create_dataset(h5ir, datafilelist, batchsize, num_epochs,
     #)
 
     dataset = dataset.prefetch(16)
-    # make sure all batches are equal in size
-    dataset = dataset.apply(tf.contrib.data.batch_and_drop_remainder(batchsize))
+    # Construct equal-size batches
+    dataset = dataset.batch(batchsize, drop_remainder=True)
     dataset = dataset.repeat(num_epochs)
 
     return dataset
