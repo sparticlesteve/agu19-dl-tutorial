@@ -3,9 +3,9 @@ output_dir: $SCRATCH/agu19-dl-tutorial/test
 data:
     name: dummy
     input_shape: [768, 1152, 16]
-    target_shape: [768, 1152, 3]
-    n_train: 2
-    n_valid: 1
+    target_shape: [768, 1152]
+    n_train: 8
+    n_valid: 8
     batch_size: 1
 
 model:
@@ -18,7 +18,5 @@ optimizer:
     lr: 0.001
 
 train:
-    loss: categorical_crossentropy
-    metrics: [accuracy]
-    # Put this under data?
-    n_epochs: 8
+    loss: sparse_categorical_crossentropy
+    n_epochs: 4

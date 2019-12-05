@@ -6,11 +6,12 @@ import tensorflow as tf
 # FIXME: make the dummy dataset the same as the real dataset which
 # targets prepared as integer labels rather than class label vectors
 
-def construct_dataset(n_samples, input_shape, target_shape, batch_size):
+def construct_dataset(n_samples, input_shape, target_shape, batch_size, n_unique=1):
     """Construct a dataset of inputs and targets"""
-    x = tf.random.uniform([n_samples] + input_shape)
-    y = tf.random.uniform([n_samples] + target_shape)
+    x = tf.random.uniform([n_unique] + input_shape)
+    y = tf.random.uniform([n_unique] + target_shape, maxval=2, dtype=tf.int32)
     data = tf.data.Dataset.from_tensor_slices((x, y))
+    data = data.shuffle(4).repeat(n_samples)
     return data.batch(batch_size)
 
 def get_datasets(input_shape, target_shape, n_train, n_valid, batch_size,
