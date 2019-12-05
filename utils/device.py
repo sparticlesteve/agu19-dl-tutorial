@@ -24,3 +24,8 @@ def configure_session(intra_threads=4, inter_threads=2,
     if gpu is not None:
         config.gpu_options.visible_device_list = str(gpu)
     keras.backend.set_session(Session(config=config))
+
+    # For some reason TF is trying to put things on the wrong GPUs
+    # unless we also specify device this way. Seems like a bug.
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    tf.config.experimental.set_visible_devices(gpus[gpu], 'GPU')
