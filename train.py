@@ -87,8 +87,17 @@ def main():
     # Custom metrics for pixel accuracy and IoU
     metrics = [PixelAccuracy(), PixelIoU(name='iou', num_classes=3)]
 
+    # TEST custom loss which flattens out the image spatial dimensions
+    import tensorflow.keras.backend as K
+    def custom_loss(y_true, y_pred, from_logits=False, axis=-1):
+        return K.sparse_categorical_crossentropy(
+            K.reshape(y_true, [1, 884736]),
+            K.reshape(y_pred, [1, 884736, 3]),
+            from_logits=from_logits, axis=axis)
+
     # Compile the model
-    model.compile(loss=train_config['loss'], optimizer=optimizer,
+    model.compile(loss=custom_loss, optimizer=optimizer,
+                  #sample_weight_mode='temporal',
                   metrics=metrics)
 
     # Print a model summary
