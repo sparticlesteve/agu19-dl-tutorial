@@ -24,30 +24,22 @@ def create_dataset(h5ir, datafilelist, batchsize, num_epochs,
     if shuffle:
         dataset = dataset.shuffle(buffer_size=100)
 
+    # Dataset file parsing function which invokes our reader
     def parse_data(filename):
         data, label = tf.numpy_function(h5ir.read, inp=[filename, False],
                                  Tout=[dtype, tf.int32])
+        # Need to partially specify shape here to workaround inability of
+        # Keras to later determine the rank of the tensors
         data.set_shape([None, None, None])
         label.set_shape([None, None])
         return data, label
 
     dataset = dataset.map(map_func=parse_data, num_parallel_calls = 4)
 
-    # Old implementation which doesn't work because keras cannot
-    # determine tensor ranks downstream
-    #dataset = dataset.map(
-    #    map_func=lambda dataname: tuple(
-    #        tf.py_func(h5ir.read, [dataname, False],
-    #                   [dtype, tf.int32]) #, dtype, tf.string])
-    #    ),
-    #    num_parallel_calls = 4
-    #)
-
     dataset = dataset.prefetch(16)
     # Construct equal-size batches
     dataset = dataset.batch(batchsize, drop_remainder=True)
     dataset = dataset.repeat(num_epochs)
-
     return dataset
 
 class SharedExchangeBuffer(object):
@@ -312,7 +304,7 @@ def get_datasets(train_dir, valid_dir, n_train, n_valid, batch_size, n_ranks, ra
     channels = range(16)
     n_epochs = 1
 
-    # Mimicing Thorsten's weighting scheme, which might not be optimal
+    # Replicating Thorsten's weighting scheme, which might not be optimal
     frequencies = [0.991, 0.0266, 0.13]
     weights = [1./x for x in frequencies]
     weights /= np.sum(weights)
