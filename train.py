@@ -22,6 +22,7 @@ from models import get_model
 from utils.optimizers import get_optimizer
 from utils.callbacks import TimingCallback
 from utils.device import configure_session
+from utils.metrics import PixelAccuracy, PixelIoU
 
 def parse_args():
     """Parse command line arguments."""
@@ -82,8 +83,15 @@ def main():
     model = get_model(**config['model'])
     optimizer = get_optimizer(n_ranks=n_ranks, **config['optimizer'])
     train_config = config['train']
+
+    # Custom metrics for pixel accuracy and IoU
+    metrics = [PixelAccuracy(), PixelIoU(name='iou', num_classes=3)]
+
+    # Compile the model
     model.compile(loss=train_config['loss'], optimizer=optimizer,
-                  metrics=train_config['metrics'])
+                  metrics=metrics)
+
+    # Print a model summary
     if rank == 0:
         model.summary()
 
