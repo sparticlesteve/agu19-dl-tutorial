@@ -25,7 +25,7 @@ def create_dataset(h5ir, datafilelist, batchsize, num_epochs,
         dataset = dataset.shuffle(buffer_size=100)
 
     def parse_data(filename):
-        data, label = tf.py_func(h5ir.read, inp=[filename, False],
+        data, label = tf.numpy_function(h5ir.read, inp=[filename, False],
                                  Tout=[dtype, tf.int32])
         data.set_shape([None, None, None])
         label.set_shape([None, None])
