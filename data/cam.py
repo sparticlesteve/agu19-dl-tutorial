@@ -26,13 +26,18 @@ def create_dataset(h5ir, datafilelist, batchsize, num_epochs,
 
     # Dataset file parsing function which invokes our reader
     def parse_data(filename):
-        data, label = tf.numpy_function(h5ir.read, inp=[filename, False],
-                                 Tout=[dtype, tf.int32])
+        data, label = tf.numpy_function(h5ir.read,
+                                        inp=[filename, False],
+                                        Tout=[dtype, tf.int32])
+        #data, label, weights = tf.numpy_function(h5ir.read,
+        #                                         inp=[filename, False],
+        #                                         Tout=[dtype, tf.int32, dtype])
         # Need to partially specify shape here to workaround inability of
         # Keras to later determine the rank of the tensors
         data.set_shape([None, None, None])
         label.set_shape([None, None])
-        return data, label
+        #weights.set_shape([None, None])
+        return data, label#, weights
 
     dataset = dataset.map(map_func=parse_data, num_parallel_calls = 4)
 
@@ -197,7 +202,7 @@ class h5_input_reader(object):
         if profile: 
             end_time = time.time()
             print("Time to read in parallel %s = %.3f s" % (path, end_time-begin_time))
-        return data, label #, weights, path
+        return data, label#, weights #, path
 
     def sequential_read(self, datafile, profile=False):
         if isinstance(datafile, bytes):
@@ -276,7 +281,7 @@ class h5_input_reader(object):
                 print("READ: %s = %.3f s"%(key, val))
             print("")
 
-        return data, label #, weights, path
+        return data, label#, weights #, path
 
 def get_file_list(input_path, shuffle=True, max_files=-1): # use_horovod=True
     # Look for labels and data files
