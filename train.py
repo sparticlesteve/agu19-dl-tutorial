@@ -124,11 +124,17 @@ def main():
     if rank == 0:
         logging.debug('Callbacks: %s', callbacks)
 
+    # TEST class weights - these seem to be ignored no matter what!
+    #class_weights = [0., 6., .3]
+    #class_weights = {0 : 10000.02, 1 : 1.3e6, 2 : 8.2e2}
+    #class_weights = [0.0217966, 0.81204625, 0.16615715]
+
     # Train the model
-    verbosity = 2 if rank==0 or args.verbose else 0
+    verbosity = 2 if (rank==0 or args.verbose) else 0
     history = model.fit(train_data,
                         validation_data=valid_data,
                         epochs=train_config['n_epochs'],
+                        class_weight=class_weights,
                         callbacks=callbacks,
                         verbose=verbosity)
 
