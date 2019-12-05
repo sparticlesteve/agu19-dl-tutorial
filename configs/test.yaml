@@ -1,15 +1,15 @@
 output_dir: $SCRATCH/agu19-dl-tutorial/test
 
 data:
-    name: dummy
-    input_shape: [768, 1152, 16]
-    target_shape: [768, 1152]
+    name: cam
+    train_dir: /global/cscratch1/sd/sfarrell/climate-seg-benchmark/data/climseg_data/train
+    valid_dir: /global/cscratch1/sd/sfarrell/climate-seg-benchmark/data/climseg_data/validation
     n_train: 8
     n_valid: 8
     batch_size: 1
 
 model:
-    name: cnn
+    name: unet
     input_shape: [768, 1152, 16]
     n_classes: 3
 
@@ -19,4 +19,4 @@ optimizer:
 
 train:
     loss: sparse_categorical_crossentropy
-    n_epochs: 4
+    n_epochs: 2
