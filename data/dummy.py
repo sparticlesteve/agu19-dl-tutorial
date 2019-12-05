@@ -3,9 +3,6 @@
 # External imports
 import tensorflow as tf
 
-# FIXME: make the dummy dataset the same as the real dataset which
-# targets prepared as integer labels rather than class label vectors
-
 def construct_dataset(n_samples, input_shape, target_shape, batch_size, n_unique=1):
     """Construct a dataset of inputs and targets"""
     x = tf.random.uniform([n_unique] + input_shape)
